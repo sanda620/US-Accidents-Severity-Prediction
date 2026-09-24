@@ -1,0 +1,47 @@
+Feature,Availability_Assessment,Reason
+ID,Exclude,Unique record identifier; does not represent accident characteristics.
+Source,Investigate,May reflect the data collection source rather than the accident itself.
+Severity,Target,Prediction target; must not be used as an input feature.
+Start_Time,Available,Represents the accident start/reporting time and can support temporal features.
+End_Time,Potential leakage,Event end time may only become known after the incident progresses.
+Start_Lat,Available,Starting geographic location can reasonably be available when the incident is reported.
+Start_Lng,Available,Starting geographic location can reasonably be available when the incident is reported.
+End_Lat,Potential leakage,Ending location may be determined after the event and is also substantially missing.
+End_Lng,Potential leakage,Ending location may be determined after the event and is also substantially missing.
+Distance(mi),Investigate,May describe the spatial extent of the event and could contain post-event information.
+Description,Investigate,Free-text information may contain details added after initial reporting.
+Street,Available,Road/street information can potentially be known at incident reporting.
+City,Available,Location information can potentially be known at incident reporting.
+County,Available,Geographical information associated with the incident location.
+State,Available,Geographical information associated with the incident location.
+Zipcode,Available,Location information can potentially be known at incident reporting.
+Country,Exclude,Constant value in the working dataset.
+Timezone,Available,Can be derived from or associated with the incident location.
+Airport_Code,Investigate,Related to nearby weather reporting infrastructure rather than directly to the accident.
+Weather_Timestamp,Investigate,Must ensure the weather observation does not occur after the prediction time.
+Temperature(F),Investigate,Potentially available from contemporaneous weather observations.
+Wind_Chill(F),Investigate,Potentially available from contemporaneous weather observations.
+Humidity(%),Investigate,Potentially available from contemporaneous weather observations.
+Pressure(in),Investigate,Potentially available from contemporaneous weather observations.
+Visibility(mi),Investigate,Potentially available from contemporaneous weather observations.
+Wind_Direction,Investigate,Potentially available from contemporaneous weather observations.
+Wind_Speed(mph),Investigate,Potentially available from contemporaneous weather observations.
+Precipitation(in),Investigate,"Potentially available from contemporaneous weather observations, but missingness is substantial."
+Weather_Condition,Investigate,Potentially available from contemporaneous weather observations.
+Amenity,Available,Road/environment context that can potentially be known at the incident location.
+Bump,Available,Road/environment context that can potentially be known at the incident location.
+Crossing,Available,Road intersection/context information.
+Give_Way,Available,Road traffic-control context.
+Junction,Available,Road intersection/context information.
+No_Exit,Available,Road/environment context.
+Railway,Available,Road/environment context.
+Roundabout,Available,Road/environment context.
+Station,Available,Road/environment context.
+Stop,Available,Traffic-control context.
+Traffic_Calming,Available,Road/environment context.
+Traffic_Signal,Available,Traffic-control context.
+Turning_Loop,Exclude,Constant value in the working dataset.
+Sunrise_Sunset,Available,Can be derived from accident time and location.
+Civil_Twilight,Available,Can be derived from accident time and location.
+Nautical_Twilight,Available,Can be derived from accident time and location.
+Astronomical_Twilight,Available,Can be derived from accident time and location.
