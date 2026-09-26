@@ -1,0 +1,12 @@
+Feature,Data_Type,Unique_Values,Missing_Count,Training_Min,Training_Max,Description
+Start_Year,int32,8,0,2016.0,2023.0,Year of accident start time
+Start_Month,int32,12,0,1.0,12.0,Month of accident start time
+Start_Day,int32,31,0,1.0,31.0,Day of month of accident start time
+Start_Hour,int32,24,0,0.0,23.0,Hour of accident start time
+Start_DayOfWeek,int32,7,0,0.0,6.0,"Day of week; Monday=0, Sunday=6"
+Is_Weekend,int64,2,0,0.0,1.0,Indicator for Saturday or Sunday
+Is_Night,int64,2,0,0.0,1.0,Indicator for nighttime accident
+Hour_Sin,float64,22,0,-1.0,1.0,Cyclical sine encoding of hour
+Hour_Cos,float64,22,0,-1.0,1.0,Cyclical cosine encoding of hour
+Month_Sin,float64,11,0,-1.0,1.0,Cyclical sine encoding of month
+Month_Cos,float64,11,0,-1.0,1.0,Cyclical cosine encoding of month
