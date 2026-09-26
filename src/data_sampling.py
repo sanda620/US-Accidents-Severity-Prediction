@@ -37,7 +37,8 @@ for chunk in pd.read_csv(
 ):
 
     chunk["Year"] = pd.to_datetime(
-        chunk["Start_Time"],
+        chunk["Start_Time"].astype(str).str.strip(),
+        format="mixed",
         errors="coerce"
     ).dt.year
 
@@ -91,7 +92,8 @@ for chunk_number, chunk in enumerate(
 ):
 
     chunk["Year"] = pd.to_datetime(
-        chunk["Start_Time"],
+        chunk["Start_Time"].astype(str).str.strip(),
+        format="mixed",
         errors="coerce"
     ).dt.year
 
