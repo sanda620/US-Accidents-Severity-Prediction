@@ -1,0 +1,16 @@
+Feature,Data_Type,Train_Unique_Values,Test_Unique_Values,Train_Missing_Count,Test_Missing_Count,Unseen_Test_Categories,Unseen_Test_Percentage,Encoding_Strategy,Reason
+Source,object,3,3,0,0,0,0.0,ONE_HOT,Low-cardinality categorical feature suitable for one-hot encoding.
+Street,object,114797,50761,0,0,14703,12.8078,FREQUENCY,High-cardinality feature; frequency encoding avoids a very large one-hot feature matrix.
+City,object,10349,7690,0,0,381,3.6815,FREQUENCY,High-cardinality feature; frequency encoding avoids a very large one-hot feature matrix.
+County,object,1672,1456,0,0,36,2.1531,FREQUENCY,High-cardinality categorical feature; frequency encoding reduces dimensionality.
+State,object,49,49,0,0,0,0.0,ONE_HOT,Moderate/low cardinality; one-hot encoding is feasible for the modeling pipeline.
+Zipcode,object,183212,62569,0,0,33027,18.0267,FREQUENCY,High-cardinality feature; frequency encoding avoids a very large one-hot feature matrix.
+Country,object,1,1,0,0,0,0.0,EXCLUDE,Constant feature with no predictive variation.
+Timezone,object,5,5,0,0,0,0.0,ONE_HOT,Low-cardinality categorical feature suitable for one-hot encoding.
+Airport_Code,object,1943,1770,0,0,21,1.0808,FREQUENCY,High-cardinality feature; frequency encoding avoids a very large one-hot feature matrix.
+Wind_Direction,object,25,25,0,0,0,0.0,ONE_HOT,Moderate/low cardinality; one-hot encoding is feasible for the modeling pipeline.
+Weather_Condition,object,114,97,0,0,5,4.386,FREQUENCY,High-cardinality categorical feature; frequency encoding reduces dimensionality.
+Sunrise_Sunset,object,3,3,0,0,0,0.0,ONE_HOT,Low-cardinality categorical feature suitable for one-hot encoding.
+Civil_Twilight,object,3,3,0,0,0,0.0,ONE_HOT,Low-cardinality categorical feature suitable for one-hot encoding.
+Nautical_Twilight,object,3,3,0,0,0,0.0,ONE_HOT,Low-cardinality categorical feature suitable for one-hot encoding.
+Astronomical_Twilight,object,3,3,0,0,0,0.0,ONE_HOT,Low-cardinality categorical feature suitable for one-hot encoding.
