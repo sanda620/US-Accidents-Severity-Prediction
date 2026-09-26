@@ -1,0 +1,11 @@
+Feature,Feature_Group,Skewness,IQR_Outlier_Percentage,Spearman_Correlation_With_Severity,Suggested_Action
+Distance(mi),Continuous,16.604734854615664,12.453590405078076,-0.14127385408828486,Consider transformation
+Pressure(in),Continuous,-3.7125132223139237,5.758353727085947,0.09043285523471642,Consider transformation
+Start_Lat,Continuous,-0.07057261713279886,0.0,0.059733804679498174,No strong skewness
+Wind_Speed(mph),Continuous,0.8736723131998905,3.739653583402216,0.044412800625987674,Moderate skewness
+Wind_Chill(F),Continuous,-0.9178256417275169,6.070731411464436,-0.04372008275257354,Moderate skewness
+Start_Lng,Continuous,-0.48217703491300073,0.0,0.03281956198417259,No strong skewness
+Precipitation(in),Continuous,131.3191607161653,0.0,0.025163597627672243,Consider transformation
+Humidity(%),Continuous,-0.40510340059515126,0.0,0.01579098094676023,No strong skewness
+Visibility(mi),Continuous,2.3838021505933953,0.0,-0.010381663184061427,Consider transformation
+Temperature(F),Continuous,-0.5247977298971257,0.8414689504334896,-0.009965422869520377,Moderate skewness
