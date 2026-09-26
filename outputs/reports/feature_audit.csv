@@ -1,0 +1,47 @@
+Feature,Data_Type,Unique_Values,Missing_Count,Missing_Percentage,Decision,Reason
+ID,object,999458,0,0.0,EXCLUDE,Identifier with no meaningful predictive information
+Source,object,3,0,0.0,INVESTIGATE,Record source with 3 categories; may reflect data-collection differences or source bias
+Severity,int64,4,0,0.0,TARGET,Target variable for multiclass classification
+Start_Time,object,955731,0,0.0,TEMPORAL,"Used to derive hour, day, month, year, weekday, weekend, night and cyclical time features"
+End_Time,object,976005,0,0.0,LEAKAGE_RISK,Potential post-event information unavailable at prediction time
+Start_Lat,float64,620867,0,0.0,GEOGRAPHIC,Accident starting latitude; potentially useful for spatial patterns
+Start_Lng,float64,622941,0,0.0,GEOGRAPHIC,Accident starting longitude; potentially useful for spatial patterns
+End_Lat,float64,346024,510314,51.06,LEAKAGE_RISK,Potential post-event information and approximately 51% missing
+End_Lng,float64,348814,510314,51.06,LEAKAGE_RISK,Potential post-event information and approximately 51% missing
+Distance(mi),float64,12462,0,0.0,NUMERICAL_INVESTIGATE,Strong right skew; investigate log1p transformation and prediction-time availability
+Description,object,750126,1,0.0,TEXT_INVESTIGATE,High-cardinality free-text field; possible post-event information; NLP not included in initial pipeline
+Street,object,126262,1104,0.11,HIGH_CARDINALITY,Approximately 126k unique values; investigate frequency encoding or alternative representation
+City,object,10684,30,0.0,CATEGORICAL,Categorical geographic variable; encoding strategy to be determined
+County,object,1709,0,0.0,CATEGORICAL,Categorical geographic variable; encoding strategy to be determined
+State,object,49,0,0.0,CATEGORICAL,Low-cardinality geographic variable suitable for categorical encoding
+Zipcode,object,211972,250,0.03,HIGH_CARDINALITY,Approximately 212k unique values; investigate frequency encoding or exclusion
+Country,object,1,0,0.0,EXCLUDE,Constant column; contains no variation
+Timezone,object,4,961,0.1,CATEGORICAL,Low-cardinality categorical variable
+Airport_Code,object,1950,2585,0.26,HIGH_CARDINALITY,"Approximately 1,950 unique values; investigate usefulness and encoding"
+Weather_Timestamp,object,393438,15155,1.52,INVESTIGATE,Weather observation time must be checked for prediction-time availability
+Temperature(F),float64,769,20883,2.09,WEATHER_NUMERICAL,Weather variable with approximately 2.09% missing values
+Wind_Chill(F),float64,865,294818,29.5,WEATHER_NUMERICAL,Approximately 29.50% missing; investigate missingness indicator and imputation
+Humidity(%),float64,100,22197,2.22,WEATHER_NUMERICAL,Approximately 2.22% missing
+Pressure(in),float64,1027,17892,1.79,WEATHER_NUMERICAL,Contains suspicious extreme values; requires domain-aware validation
+Visibility(mi),float64,67,22684,2.27,WEATHER_NUMERICAL,Highly concentrated at 10 miles; IQR method is unsuitable for direct outlier removal
+Wind_Direction,object,24,21750,2.18,WEATHER_CATEGORICAL,Categorical weather variable with approximately 2.18% missing
+Wind_Speed(mph),float64,120,81287,8.13,WEATHER_NUMERICAL,Contains suspicious extreme value of 822.8 mph; requires validation
+Precipitation(in),float64,210,324291,32.45,WEATHER_NUMERICAL,Approximately 32.45% missing and strongly zero-inflated; investigate missingness indicator and log1p
+Weather_Condition,object,111,22350,2.24,WEATHER_CATEGORICAL,Categorical weather variable with approximately 2.24% missing
+Amenity,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Bump,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Crossing,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Give_Way,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Junction,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+No_Exit,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Railway,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Roundabout,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Station,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Stop,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Traffic_Calming,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Traffic_Signal,bool,2,0,0.0,BOOLEAN,Road/environment context indicator
+Turning_Loop,bool,1,0,0.0,EXCLUDE,Constant column; contains no variation
+Sunrise_Sunset,object,2,2394,0.24,TEMPORAL_CATEGORICAL,Day/night context; potentially redundant with Start_Time-derived features
+Civil_Twilight,object,2,2394,0.24,TEMPORAL_CATEGORICAL,Twilight context; investigate redundancy with derived temporal features
+Nautical_Twilight,object,2,2394,0.24,TEMPORAL_CATEGORICAL,Twilight context; investigate redundancy with derived temporal features
+Astronomical_Twilight,object,2,2394,0.24,TEMPORAL_CATEGORICAL,Twilight context; investigate redundancy with derived temporal features
