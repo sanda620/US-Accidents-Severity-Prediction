@@ -1,0 +1,3 @@
+Feature,Train_Missing,Test_Missing,Train_Infinite,Test_Infinite,Train_Min,Train_Max,Test_Min,Test_Max
+Distance_log1p,0,0,0,0,0.0,5.276736136686092,0.0,4.322409354296695
+Precipitation_log1p,0,0,0,0,0.0,3.623540612805596,0.0,3.2188758248682006
