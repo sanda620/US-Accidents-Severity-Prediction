@@ -1,0 +1,23 @@
+Feature,Missing_Count,Missing_Percentage,Treatment,Reason
+End_Lat,352033,44.02211904115808,EXCLUDE,Potential post-event information and approximately 51% missing; exclude rather than impute to avoid leakage.
+End_Lng,352033,44.02211904115808,EXCLUDE,Potential post-event information and approximately 51% missing; exclude rather than impute to avoid leakage.
+Precipitation(in),228510,28.575430207097153,MISSING_INDICATOR_AND_MEDIAN,High missingness (32.42%) and zero-inflated distribution; retain missingness information using an indicator and impute the numerical value using a training-set median.
+Wind_Chill(F),207445,25.941228477140033,MISSING_INDICATOR_AND_MEDIAN,High missingness (29.45%); retain missingness information and use training-set median imputation.
+Wind_Speed(mph),59424,7.43103743655219,MISSING_INDICATOR_AND_MEDIAN,Moderate missingness (8.12%) and suspicious extreme values; retain missingness information and use training-set median imputation after invalid-value investigation.
+Visibility(mi),18525,2.3165718987636197,MEDIAN,Low missingness (2.27%); median imputation is robust to the concentrated distribution around 10 miles.
+Wind_Direction,18260,2.283433353383195,MISSING_CATEGORY,Categorical weather variable with 2.17% missing; represent missing observations as a separate category.
+Weather_Condition,18160,2.2709282419188845,MISSING_CATEGORY,Categorical weather variable with 2.23% missing; represent missing observations explicitly rather than assuming the most common weather condition.
+Humidity(%),18127,2.2668015551356615,MEDIAN,Low missingness (2.22%); median imputation is appropriate for a bounded numerical weather variable.
+Temperature(F),17105,2.1389993159704033,MEDIAN,Low missingness (2.09%); median imputation is appropriate for the numerical weather variable.
+Pressure(in),14779,1.8481304233105282,MEDIAN,Low missingness (1.78%); median imputation is robust to the suspicious extreme values identified during EDA.
+Weather_Timestamp,12694,1.5873988492796431,INVESTIGATE,"Missingness is low (1.51%), but prediction-time availability must be verified before deciding whether to retain the feature."
+Sunrise_Sunset,2400,0.3001226751434649,MISSING_CATEGORY,Very low missingness (0.24%); represent missing values explicitly and later assess redundancy with Start_Time-derived day/night features.
+Civil_Twilight,2400,0.3001226751434649,MISSING_CATEGORY,Very low missingness (0.24%); represent missing values explicitly and later assess redundancy.
+Nautical_Twilight,2400,0.3001226751434649,MISSING_CATEGORY,Very low missingness (0.24%); represent missing values explicitly and later assess redundancy.
+Astronomical_Twilight,2400,0.3001226751434649,MISSING_CATEGORY,Very low missingness (0.24%); represent missing values explicitly and later assess redundancy.
+Airport_Code,2313,0.28924322816951425,MISSING_CATEGORY,Only 0.26% missing; preserve missingness explicitly while high-cardinality usefulness is evaluated.
+Street,1102,0.1378063283367076,MISSING_CATEGORY,Very low missingness (0.11%) but very high cardinality; represent missing values explicitly before deciding the final encoding strategy.
+Timezone,770,0.09628935827519498,MISSING_CATEGORY,Very low missingness (0.10%) and only four categories; represent missing observations explicitly.
+Zipcode,206,0.025760529616480735,MISSING_CATEGORY,Very low missingness (0.02%) but high cardinality; represent missing observations explicitly before encoding.
+City,25,0.003126277866077759,MISSING_CATEGORY,Extremely low missingness (0.003%); use an explicit missing category for consistency.
+Description,0,0.0,MISSING_CATEGORY,"Only one missing observation; if the text feature is retained for a later NLP experiment, missing text can be represented explicitly."
