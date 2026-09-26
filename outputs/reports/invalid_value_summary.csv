@@ -1,0 +1,8 @@
+Feature,Suspicious_Count,Suspicious_Percentage,Reason
+Temperature(F),3,0.0004,Physically unusual temperature
+Wind_Speed(mph),15,0.0019,Physically questionable wind speed
+Pressure(in),44,0.0055,Physically questionable atmospheric pressure
+Visibility(mi),1,0.0001,Outside expected visibility range
+Humidity(%),0,0.0,Outside valid percentage range
+Precipitation(in),0,0.0,Negative precipitation
+Distance(mi),0,0.0,Negative or extremely large distance
