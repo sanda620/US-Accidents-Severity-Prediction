@@ -1,0 +1,16 @@
+Feature,Encoding,Train_Unique_Values,Test_Unique_Values,Unseen_Test_Categories,Output_Type
+Street,FREQUENCY,114797,50761,14703,float64
+City,FREQUENCY,10349,7690,381,float64
+County,FREQUENCY,1672,1456,36,float64
+Zipcode,FREQUENCY,183212,62569,33027,float64
+Airport_Code,FREQUENCY,1943,1770,21,float64
+Weather_Condition,FREQUENCY,114,97,5,float64
+Source,ONE_HOT,3,3,0,int8
+State,ONE_HOT,49,49,0,int8
+Timezone,ONE_HOT,5,5,0,int8
+Wind_Direction,ONE_HOT,25,25,0,int8
+Sunrise_Sunset,ONE_HOT,3,3,0,int8
+Civil_Twilight,ONE_HOT,3,3,0,int8
+Nautical_Twilight,ONE_HOT,3,3,0,int8
+Astronomical_Twilight,ONE_HOT,3,3,0,int8
+Country,EXCLUDE,1,1,0,excluded
