@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        US Accidents Severity Prediction
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <header>
+
+            <h1>
+                US Accidents Severity Prediction
+            </h1>
+
+            <p>
+                Enter accident and weather information
+                to predict accident severity.
+            </p>
+
+        </header>
+
+
+        <form id="predictionForm">
+
+
+            <!-- LOCATION -->
+
+            <section>
+
+                <h2>
+                    Accident Location
+                </h2>
+
+                <div class="grid">
+
+                    <div class="field">
+
+                        <label>
+                            Source
+                        </label>
+
+                        <input
+                            id="source"
+                            type="text"
+                            placeholder="Example: MapQuest"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Street
+                        </label>
+
+                        <input
+                            id="street"
+                            type="text"
+                            placeholder="Example: Main St"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            City
+                        </label>
+
+                        <input
+                            id="city"
+                            type="text"
+                            placeholder="Example: Miami"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            County
+                        </label>
+
+                        <input
+                            id="county"
+                            type="text"
+                            placeholder="Example: Miami-Dade"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            State
+                        </label>
+
+                        <input
+                            id="state"
+                            type="text"
+                            placeholder="Example: FL"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Zipcode
+                        </label>
+
+                        <input
+                            id="zipcode"
+                            type="text"
+                            placeholder="Example: 33101"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Latitude
+                        </label>
+
+                        <input
+                            id="start_lat"
+                            type="number"
+                            step="any"
+                            placeholder="Example: 25.76"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Longitude
+                        </label>
+
+                        <input
+                            id="start_lng"
+                            type="number"
+                            step="any"
+                            placeholder="Example: -80.19"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Distance (miles)
+                        </label>
+
+                        <input
+                            id="distance"
+                            type="number"
+                            step="any"
+                            min="0"
+                            max="200"
+                            placeholder="Example: 1.5"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- TIME -->
+
+            <section>
+
+                <h2>
+                    Accident Time
+                </h2>
+
+                <div class="field">
+
+                    <label>
+                        Start Time
+                    </label>
+
+                    <input
+                        id="start_time"
+                        type="datetime-local"
+                        required
+                    >
+
+                </div>
+
+            </section>
+
+
+            <!-- WEATHER -->
+
+            <section>
+
+                <h2>
+                    Weather Conditions
+                </h2>
+
+                <div class="grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Temperature (°F)
+                        </label>
+
+                        <input
+                            id="temperature"
+                            type="number"
+                            step="any"
+                            min="-80"
+                            max="140"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Wind Chill (°F)
+                        </label>
+
+                        <input
+                            id="wind_chill"
+                            type="number"
+                            step="any"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Humidity (%)
+                        </label>
+
+                        <input
+                            id="humidity"
+                            type="number"
+                            step="any"
+                            min="0"
+                            max="100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Pressure (in)
+                        </label>
+
+                        <input
+                            id="pressure"
+                            type="number"
+                            step="any"
+                            min="20"
+                            max="35"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Visibility (miles)
+                        </label>
+
+                        <input
+                            id="visibility"
+                            type="number"
+                            step="any"
+                            min="0"
+                            max="100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Wind Speed (mph)
+                        </label>
+
+                        <input
+                            id="wind_speed"
+                            type="number"
+                            step="any"
+                            min="0"
+                            max="100"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Precipitation (in)
+                        </label>
+
+                        <input
+                            id="precipitation"
+                            type="number"
+                            step="any"
+                            min="0"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Wind Direction
+                        </label>
+
+                        <input
+                            id="wind_direction"
+                            type="text"
+                            placeholder="Example: NW"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Weather Condition
+                        </label>
+
+                        <input
+                            id="weather_condition"
+                            type="text"
+                            placeholder="Example: Clear"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- OTHER INFORMATION -->
+
+            <section>
+
+                <h2>
+                    Other Information
+                </h2>
+
+                <div class="grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Airport Code
+                        </label>
+
+                        <input
+                            id="airport_code"
+                            type="text"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Timezone
+                        </label>
+
+                        <input
+                            id="timezone"
+                            type="text"
+                            placeholder="Example: US/Eastern"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Sunrise / Sunset
+                        </label>
+
+                        <input
+                            id="sunrise_sunset"
+                            type="text"
+                            placeholder="Example: Day"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Civil Twilight
+                        </label>
+
+                        <input
+                            id="civil_twilight"
+                            type="text"
+                            placeholder="Example: Day"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Nautical Twilight
+                        </label>
+
+                        <input
+                            id="nautical_twilight"
+                            type="text"
+                            placeholder="Example: Day"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Astronomical Twilight
+                        </label>
+
+                        <input
+                            id="astronomical_twilight"
+                            type="text"
+                            placeholder="Example: Day"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <button
+                type="submit"
+                id="predictButton"
+            >
+                Predict Accident Severity
+            </button>
+
+
+        </form>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="result"
+            class="result hidden"
+        >
+
+            <h2>
+                Prediction Result
+            </h2>
+
+            <div
+                id="severityResult"
+                class="severity"
+            >
+            </div>
+
+            <p
+                id="descriptionResult"
+            >
+            </p>
+
+
+            <h3>
+                Model Probabilities
+            </h3>
+
+            <div id="probabilities">
+            </div>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="error"
+            class="error hidden"
+        >
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
