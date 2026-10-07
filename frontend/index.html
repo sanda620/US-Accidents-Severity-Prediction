@@ -3,168 +3,807 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1220">
-  <title>US Accidents | Severity Prediction</title>
+  <meta name="theme-color" content="#070d18">
+  <title>RoadSense AI | US Traffic Incident Severity Decision Support System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="page-shell">
-    <header class="hero">
-      <nav class="topbar">
-        <a class="brand" href="#" aria-label="US Accidents home">
-          <span class="brand-mark">✦</span>
-          <span>ROAD<span class="brand-accent">SENSE</span></span>
-        </a>
-        <span class="status-pill"><span class="status-dot"></span> AI PREDICTION SYSTEM</span>
-      </nav>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-bottom-right" aria-hidden="true"></div>
 
-      <div class="hero-content">
-        <div class="hero-copy">
-          <p class="eyebrow">US ACCIDENT ANALYTICS</p>
-          <h1>Understand the road.<br><span>Predict the severity.</span></h1>
-          <p class="hero-description">Enter the accident details and surrounding conditions to estimate the likely accident severity using our machine-learning model.</p>
-          <div class="hero-points">
-            <span><span class="point-icon">✓</span> Data-driven prediction</span>
-            <span><span class="point-icon">✓</span> Weather-aware inputs</span>
-          </div>
+  <div class="app-layout">
+    <!-- Navigation & Top Command Bar -->
+    <header class="command-bar">
+      <div class="brand-group">
+        <div class="brand-badge">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span class="brand-pulse"></span>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="road-symbol">
-            <div class="road-line"></div>
-            <span class="car car-one">🚙</span>
-            <span class="car car-two">🚗</span>
-            <span class="pin">✦</span>
-          </div>
-          <div class="visual-caption"><span class="visual-caption-dot"></span> Intelligent road insights</div>
+        <div class="brand-text">
+          <div class="brand-title">ROAD<span class="brand-highlight">SENSE</span> <span class="brand-version">TMC·OPS</span></div>
+          <div class="brand-subtitle">US Traffic Incident Severity & Emergency Decision Support</div>
         </div>
       </div>
-      <div class="hero-bottom">
-        <div><span class="hero-stat-label">PREDICTION TYPE</span><strong>Multi-class classification</strong></div>
-        <div><span class="hero-stat-label">MODEL</span><strong>XGBoost</strong></div>
-        <div><span class="hero-stat-label">OUTPUT</span><strong>Severity levels 1–4</strong></div>
+
+      <div class="system-status-group">
+        <!-- Live Backend Status Pill -->
+        <div class="status-indicator" id="backendStatusPill" title="Connection status to FastAPI model server">
+          <span class="status-pulse-dot" id="statusPulseDot"></span>
+          <span class="status-text" id="backendStatusText">Checking Backend...</span>
+          <button type="button" class="status-refresh-btn" id="checkHealthBtn" title="Ping backend server">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </button>
+        </div>
+
+        <button type="button" class="endpoint-config-btn" id="configEndpointBtn" title="Configure API Endpoint URL">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span class="btn-label-text">API Config</span>
+        </button>
       </div>
     </header>
 
-    <main>
-      <div class="section-intro">
+    <!-- Operational Context & Preset Bar -->
+    <section class="scenario-command-bar">
+      <div class="scenario-headline">
+        <div class="scenario-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
         <div>
-          <p class="eyebrow">ACCIDENT DETAILS</p>
-          <h2>Build your prediction</h2>
-          <p>Fill in the known information. Fields marked optional can be left blank.</p>
+          <span class="scenario-title">Intended Operational Scenario Presets</span>
+          <span class="scenario-hint">Instantly load validated traffic incident conditions for testing & demonstration:</span>
         </div>
-        <div class="step-badge"><span>01</span> Input conditions</div>
       </div>
 
-      <form id="predictionForm">
-        <section class="form-card">
-          <div class="card-heading">
-            <div class="heading-icon location-icon">⌖</div>
-            <div><h3>Accident location</h3><p>Where did the accident happen?</p></div>
-            <span class="card-number">01</span>
-          </div>
-          <div class="grid">
-            <div class="field"><label for="source">Source <span class="required">*</span></label><input id="source" name="source" type="text" placeholder="e.g. MapQuest" required></div>
-            <div class="field"><label for="street">Street <span class="required">*</span></label><input id="street" name="street" type="text" placeholder="e.g. Main Street" required></div>
-            <div class="field"><label for="city">City <span class="required">*</span></label><input id="city" name="city" type="text" placeholder="e.g. Miami" required></div>
-            <div class="field"><label for="county">County <span class="required">*</span></label><input id="county" name="county" type="text" placeholder="e.g. Miami-Dade" required></div>
-            <div class="field"><label for="state">State <span class="required">*</span></label><input id="state" name="state" type="text" placeholder="e.g. FL" required></div>
-            <div class="field"><label for="zipcode">ZIP code <span class="required">*</span></label><input id="zipcode" name="zipcode" type="text" placeholder="e.g. 33101" required></div>
-            <div class="field"><label for="start_lat">Latitude <span class="required">*</span></label><div class="input-unit"><input id="start_lat" name="start_lat" type="number" step="any" min="-90" max="90" placeholder="25.76" required><span>°</span></div></div>
-            <div class="field"><label for="start_lng">Longitude <span class="required">*</span></label><div class="input-unit"><input id="start_lng" name="start_lng" type="number" step="any" min="-180" max="180" placeholder="-80.19" required><span>°</span></div></div>
-            <div class="field"><label for="distance">Affected road distance <span class="required">*</span></label><div class="input-unit"><input id="distance" name="distance" type="number" step="any" min="0" max="200" placeholder="1.5" required><span>mi</span></div></div>
-          </div>
-        </section>
+      <div class="scenario-pills-row">
+        <button type="button" class="scenario-pill pill-sev4" data-scenario="blizzard" title="Load Severe Mountain Interstate Blizzard Incident">
+          <span class="pill-dot"></span>
+          <span class="pill-title">Sev 4: Interstate Blizzard</span>
+          <span class="pill-tag">I-80 CA · Heavy Snow</span>
+        </button>
 
-        <section class="form-card">
-          <div class="card-heading">
-            <div class="heading-icon time-icon">◷</div>
-            <div><h3>Accident time</h3><p>When was the accident reported to have started?</p></div>
-            <span class="card-number">02</span>
-          </div>
-          <div class="grid time-grid">
-            <div class="field"><label for="start_time">Date and time <span class="required">*</span></label><input id="start_time" name="start_time" type="datetime-local" required></div>
-            <div class="helper-note"><span class="helper-icon">i</span><span>Use the local date and time associated with the accident location.</span></div>
-          </div>
-        </section>
+        <button type="button" class="scenario-pill pill-sev3" data-scenario="corridor-pileup" title="Load Major Interstate Corridor Disruption">
+          <span class="pill-dot"></span>
+          <span class="pill-title">Sev 3: Major Corridor Crash</span>
+          <span class="pill-tag">I-5 CA · Light Rain</span>
+        </button>
 
-        <section class="form-card">
-          <div class="card-heading">
-            <div class="heading-icon weather-icon">☼</div>
-            <div><h3>Weather conditions</h3><p>Describe the environmental conditions near the accident.</p></div>
-            <span class="card-number">03</span>
-          </div>
-          <div class="grid">
-            <div class="field"><label for="temperature">Temperature <span class="required">*</span></label><div class="input-unit"><input id="temperature" name="temperature" type="number" step="any" min="-80" max="140" placeholder="72" required><span>°F</span></div></div>
-            <div class="field"><label for="wind_chill">Wind chill <span class="optional">Optional</span></label><div class="input-unit"><input id="wind_chill" name="wind_chill" type="number" step="any" placeholder="Leave blank if unknown"><span>°F</span></div></div>
-            <div class="field"><label for="humidity">Humidity <span class="required">*</span></label><div class="input-unit"><input id="humidity" name="humidity" type="number" step="any" min="0" max="100" placeholder="65" required><span>%</span></div></div>
-            <div class="field"><label for="pressure">Atmospheric pressure <span class="required">*</span></label><div class="input-unit"><input id="pressure" name="pressure" type="number" step="any" min="20" max="35" placeholder="29.9" required><span>inHg</span></div></div>
-            <div class="field"><label for="visibility">Visibility <span class="required">*</span></label><div class="input-unit"><input id="visibility" name="visibility" type="number" step="any" min="0" max="100" placeholder="10" required><span>mi</span></div></div>
-            <div class="field"><label for="wind_speed">Wind speed <span class="optional">Optional</span></label><div class="input-unit"><input id="wind_speed" name="wind_speed" type="number" step="any" min="0" max="100" placeholder="e.g. 12"><span>mph</span></div></div>
-            <div class="field"><label for="precipitation">Precipitation <span class="optional">Optional</span></label><div class="input-unit"><input id="precipitation" name="precipitation" type="number" step="any" min="0" placeholder="e.g. 0.0"><span>in</span></div></div>
-            <div class="field"><label for="wind_direction">Wind direction <span class="optional">Optional</span></label><input id="wind_direction" name="wind_direction" type="text" placeholder="e.g. NW"></div>
-            <div class="field"><label for="weather_condition">Weather condition <span class="optional">Optional</span></label><input id="weather_condition" name="weather_condition" type="text" placeholder="e.g. Clear"></div>
-          </div>
-        </section>
+        <button type="button" class="scenario-pill pill-sev2" data-scenario="arterial" title="Load Moderate Urban Arterial Congestion Incident">
+          <span class="pill-dot"></span>
+          <span class="pill-title">Sev 2: Arterial Rush Incident</span>
+          <span class="pill-tag">Broad St PA · Overcast</span>
+        </button>
 
-        <section class="form-card">
-          <div class="card-heading">
-            <div class="heading-icon extra-icon">☷</div>
-            <div><h3>Additional information</h3><p>Optional local and daylight details, if available.</p></div>
-            <span class="card-number">04</span>
-          </div>
-          <div class="grid">
-            <div class="field"><label for="airport_code">Airport code <span class="optional">Optional</span></label><input id="airport_code" name="airport_code" type="text" placeholder="e.g. KMIA"></div>
-            <div class="field"><label for="timezone">Timezone <span class="optional">Optional</span></label><input id="timezone" name="timezone" type="text" placeholder="e.g. US/Eastern"></div>
-            <div class="field"><label for="sunrise_sunset">Sunrise / sunset <span class="optional">Optional</span></label><input id="sunrise_sunset" name="sunrise_sunset" type="text" placeholder="e.g. Day or Night"></div>
-            <div class="field"><label for="civil_twilight">Civil twilight <span class="optional">Optional</span></label><input id="civil_twilight" name="civil_twilight" type="text" placeholder="e.g. Day or Night"></div>
-            <div class="field"><label for="nautical_twilight">Nautical twilight <span class="optional">Optional</span></label><input id="nautical_twilight" name="nautical_twilight" type="text" placeholder="e.g. Day or Night"></div>
-            <div class="field"><label for="astronomical_twilight">Astronomical twilight <span class="optional">Optional</span></label><input id="astronomical_twilight" name="astronomical_twilight" type="text" placeholder="e.g. Day or Night"></div>
-          </div>
-        </section>
+        <button type="button" class="scenario-pill pill-sev1" data-scenario="minor" title="Load Minor Local Street Bump">
+          <span class="pill-dot"></span>
+          <span class="pill-title">Sev 1: Local Minor St</span>
+          <span class="pill-tag">Austin TX · Clear Day</span>
+        </button>
 
-        <div class="form-actions">
-          <p><span class="required">*</span> Required fields</p>
-          <div class="action-buttons">
-            <button type="reset" class="button button-secondary" id="resetButton">Reset form</button>
-            <button type="submit" id="predictButton" class="button button-primary"><span class="button-icon">✦</span><span class="button-label">Predict severity</span><span class="button-arrow">→</span></button>
+        <button type="button" class="scenario-pill pill-action" id="setCurrentTimeQuickBtn" title="Set start time to current device time">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Current Time</span>
+        </button>
+
+        <button type="button" class="scenario-pill pill-action pill-reset" id="quickResetBtn" title="Clear and reset all form inputs">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>Reset</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Operational Notification Banners -->
+    <div id="backendOfflineAlert" class="alert-banner alert-warning hidden" role="alert">
+      <div class="alert-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <div class="alert-content">
+        <strong>Prediction Backend Server Not Detected</strong>
+        <p>The frontend cannot connect to <code id="offlineUrlDisplay">http://127.0.0.1:8000</code>. Please start the FastAPI backend server using:</p>
+        <div class="code-snippet"><code>.\venv\Scripts\python.exe -m uvicorn backend.app:app --host 127.0.0.1 --port 8000</code></div>
+      </div>
+      <button type="button" class="alert-retry-btn" id="offlineRetryBtn">Retry Connection</button>
+    </div>
+
+    <!-- Main Workspace Container -->
+    <main class="main-workspace">
+      <!-- Input Formulation Panel (Left/Primary Column) -->
+      <div class="form-container">
+        <div class="section-header">
+          <div class="header-left">
+            <span class="badge-eyebrow">DECISION SUPPORT INPUTS</span>
+            <h1 class="main-heading">Incident Parameters & Conditions</h1>
+            <p class="section-subtext">Enter road, temporal, and atmospheric variables to assess accident traffic-impact severity.</p>
+          </div>
+          <div class="form-validator-badge" id="formValidationStatusBadge">
+            <span class="validator-icon">✓</span>
+            <span class="validator-text" id="formValidationStatusText">All Required Fields Ready</span>
           </div>
         </div>
-      </form>
 
-      <div id="error" class="error-box hidden" role="alert" aria-live="polite">
-        <span class="error-symbol">!</span><div><strong>Prediction could not be completed</strong><p id="errorMessage"></p></div>
+        <form id="predictionForm" novalidate>
+          <!-- Section 1: Location & Road Network -->
+          <div class="card-section">
+            <div class="card-header">
+              <div class="card-header-icon icon-location">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <div class="card-title-group">
+                <div class="card-step">STAGE 01</div>
+                <h2 class="card-title">Incident Location & Road Network</h2>
+                <p class="card-description">Geographic coordinates and roadway characteristics where incident occurred.</p>
+              </div>
+              <div class="quick-metro-presets">
+                <span class="metro-label">Quick Metro:</span>
+                <button type="button" class="metro-chip" data-metro="miami">Miami, FL</button>
+                <button type="button" class="metro-chip" data-metro="la">Los Angeles, CA</button>
+                <button type="button" class="metro-chip" data-metro="chicago">Chicago, IL</button>
+                <button type="button" class="metro-chip" data-metro="nyc">New York, NY</button>
+              </div>
+            </div>
+
+            <div class="form-grid grid-3">
+              <!-- Source -->
+              <div class="input-group">
+                <label for="source" class="input-label">Data Source <span class="req">*</span></label>
+                <div class="select-wrapper">
+                  <select id="source" name="source" class="form-control" required>
+                    <option value="Source2" selected>Source2 (Automated In-Vehicle/Sensors)</option>
+                    <option value="Source1">Source1 (TMC / Law Enforcement Feed)</option>
+                    <option value="Source3">Source3 (Crowdsourced / Partner Reports)</option>
+                  </select>
+                </div>
+                <span class="field-hint">Reporting data pipeline</span>
+              </div>
+
+              <!-- Street -->
+              <div class="input-group">
+                <label for="street" class="input-label">Street / Highway <span class="req">*</span></label>
+                <input id="street" name="street" type="text" class="form-control" placeholder="e.g. I-95 S or Main St" required value="I-95 S">
+                <span class="field-error" id="streetError">Street name is required</span>
+              </div>
+
+              <!-- City -->
+              <div class="input-group">
+                <label for="city" class="input-label">City <span class="req">*</span></label>
+                <input id="city" name="city" type="text" class="form-control" placeholder="e.g. Miami" required value="Miami">
+                <span class="field-error" id="cityError">City name is required</span>
+              </div>
+
+              <!-- County -->
+              <div class="input-group">
+                <label for="county" class="input-label">County <span class="req">*</span></label>
+                <input id="county" name="county" type="text" class="form-control" placeholder="e.g. Miami-Dade" required value="Miami-Dade">
+                <span class="field-error" id="countyError">County name is required</span>
+              </div>
+
+              <!-- State -->
+              <div class="input-group">
+                <label for="state" class="input-label">State <span class="req">*</span></label>
+                <div class="select-wrapper">
+                  <select id="state" name="state" class="form-control" required>
+                    <option value="">Select US State</option>
+                    <option value="AL">Alabama (AL)</option><option value="AR">Arkansas (AR)</option><option value="AZ">Arizona (AZ)</option><option value="CA">California (CA)</option><option value="CO">Colorado (CO)</option><option value="CT">Connecticut (CT)</option><option value="DC">District of Columbia (DC)</option><option value="DE">Delaware (DE)</option><option value="FL" selected>Florida (FL)</option><option value="GA">Georgia (GA)</option><option value="IA">Iowa (IA)</option><option value="ID">Idaho (ID)</option><option value="IL">Illinois (IL)</option><option value="IN">Indiana (IN)</option><option value="KS">Kansas (KS)</option><option value="KY">Kentucky (KY)</option><option value="LA">Louisiana (LA)</option><option value="MA">Massachusetts (MA)</option><option value="MD">Maryland (MD)</option><option value="ME">Maine (ME)</option><option value="MI">Michigan (MI)</option><option value="MN">Minnesota (MN)</option><option value="MO">Missouri (MO)</option><option value="MS">Mississippi (MS)</option><option value="MT">Montana (MT)</option><option value="NC">North Carolina (NC)</option><option value="ND">North Dakota (ND)</option><option value="NE">Nebraska (NE)</option><option value="NH">New Hampshire (NH)</option><option value="NJ">New Jersey (NJ)</option><option value="NM">New Mexico (NM)</option><option value="NV">Nevada (NV)</option><option value="NY">New York (NY)</option><option value="OH">Ohio (OH)</option><option value="OK">Oklahoma (OK)</option><option value="OR">Oregon (OR)</option><option value="PA">Pennsylvania (PA)</option><option value="RI">Rhode Island (RI)</option><option value="SC">South Carolina (SC)</option><option value="SD">South Dakota (SD)</option><option value="TN">Tennessee (TN)</option><option value="TX">Texas (TX)</option><option value="UT">Utah (UT)</option><option value="VA">Virginia (VA)</option><option value="VT">Vermont (VT)</option><option value="WA">Washington (WA)</option><option value="WI">Wisconsin (WI)</option><option value="WV">West Virginia (WV)</option><option value="WY">Wyoming (WY)</option>
+                  </select>
+                </div>
+                <span class="field-error" id="stateError">State is required</span>
+              </div>
+
+              <!-- Zipcode -->
+              <div class="input-group">
+                <label for="zipcode" class="input-label">ZIP Code <span class="req">*</span></label>
+                <input id="zipcode" name="zipcode" type="text" class="form-control" placeholder="e.g. 33101" pattern="^\d{5}(-\d{4})?$" required value="33101">
+                <span class="field-error" id="zipcodeError">Valid 5-digit US ZIP required</span>
+              </div>
+
+              <!-- Start Latitude -->
+              <div class="input-group">
+                <label for="start_lat" class="input-label">Latitude (°N) <span class="req">*</span></label>
+                <div class="input-with-unit">
+                  <input id="start_lat" name="start_lat" type="number" step="any" min="-90" max="90" class="form-control" placeholder="25.7617" required value="25.7617">
+                  <span class="unit-tag">°</span>
+                </div>
+                <span class="field-hint">Range: -90 to +90 (US ~24° to ~49°)</span>
+                <span class="field-error" id="latError">Latitude must be between -90 and 90</span>
+              </div>
+
+              <!-- Start Longitude -->
+              <div class="input-group">
+                <label for="start_lng" class="input-label">Longitude (°W) <span class="req">*</span></label>
+                <div class="input-with-unit">
+                  <input id="start_lng" name="start_lng" type="number" step="any" min="-180" max="180" class="form-control" placeholder="-80.1918" required value="-80.1918">
+                  <span class="unit-tag">°</span>
+                </div>
+                <span class="field-hint">Range: -180 to +180 (US ~-125° to ~-66°)</span>
+                <span class="field-error" id="lngError">Longitude must be between -180 and 180</span>
+              </div>
+
+              <!-- Affected Road Distance -->
+              <div class="input-group span-full-desktop">
+                <div class="distance-header-row">
+                  <label for="distance" class="input-label">Impacted Roadway Extent <span class="req">*</span></label>
+                  <span class="distance-badge" id="distanceLiveBadge">1.50 mi (Highway Queue)</span>
+                </div>
+                <div class="distance-dual-control">
+                  <input type="range" id="distanceRange" min="0" max="20" step="0.1" value="1.5" class="distance-slider" aria-label="Distance Slider">
+                  <div class="input-with-unit distance-number-box">
+                    <input id="distance" name="distance" type="number" step="any" min="0" max="200" class="form-control" placeholder="1.5" required value="1.5">
+                    <span class="unit-tag">miles</span>
+                  </div>
+                </div>
+                <div class="distance-scale-ticks">
+                  <span>0.0 mi (Localized)</span>
+                  <span>1.0 mi</span>
+                  <span>3.0 mi (Major Queue)</span>
+                  <span>10.0+ mi (Critical Gridlock)</span>
+                </div>
+                <span class="field-error" id="distanceError">Distance must be between 0 and 200 miles</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Timestamp & Temporal Profile -->
+          <div class="card-section">
+            <div class="card-header">
+              <div class="card-header-icon icon-time">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="card-title-group">
+                <div class="card-step">STAGE 02</div>
+                <h2 class="card-title">Incident Timing & Temporal Context</h2>
+                <p class="card-description">Temporal features govern traffic density, rush hour impact, and visibility.</p>
+              </div>
+              <button type="button" class="btn-subtle" id="setNowBtn">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Set to Now
+              </button>
+            </div>
+
+            <div class="form-grid grid-2">
+              <!-- Start Time -->
+              <div class="input-group">
+                <label for="start_time" class="input-label">Incident Start Date & Time <span class="req">*</span></label>
+                <input id="start_time" name="start_time" type="datetime-local" class="form-control" required>
+                <span class="field-hint">Local timestamp of initial occurrence</span>
+                <span class="field-error" id="timeError">Valid incident date and time is required</span>
+              </div>
+
+              <!-- Timezone -->
+              <div class="input-group">
+                <label for="timezone" class="input-label">US Timezone</label>
+                <div class="select-wrapper">
+                  <select id="timezone" name="timezone" class="form-control">
+                    <option value="US/Eastern" selected>US/Eastern (EST/EDT)</option>
+                    <option value="US/Central">US/Central (CST/CDT)</option>
+                    <option value="US/Mountain">US/Mountain (MST/MDT)</option>
+                    <option value="US/Pacific">US/Pacific (PST/PDT)</option>
+                  </select>
+                </div>
+                <span class="field-hint">Regional standard operational time</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Temporal Intelligence Readout -->
+            <div class="temporal-analytics-card" id="temporalReadout">
+              <div class="temporal-metric">
+                <span class="metric-label">DETECTED DAY:</span>
+                <span class="metric-value" id="temporalDayText">—</span>
+              </div>
+              <div class="temporal-metric">
+                <span class="metric-label">TRAFFIC PROFILE:</span>
+                <span class="metric-value" id="temporalRushText">—</span>
+              </div>
+              <div class="temporal-metric">
+                <span class="metric-label">PERIOD:</span>
+                <span class="metric-value" id="temporalLightingText">—</span>
+              </div>
+              <div class="temporal-metric">
+                <span class="metric-label">CYCLICAL ENCODING:</span>
+                <span class="metric-value font-mono" id="temporalCycleText">Sin/Cos Ready</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Weather & Atmospheric Conditions -->
+          <div class="card-section">
+            <div class="card-header">
+              <div class="card-header-icon icon-weather">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+              </div>
+              <div class="card-title-group">
+                <div class="card-step">STAGE 03</div>
+                <h2 class="card-title">Atmospheric & Roadway Weather</h2>
+                <p class="card-description">Severe precipitation, reduced visibility, and thermal extremes amplify crash severity.</p>
+              </div>
+              <div class="weather-presets">
+                <button type="button" class="weather-preset-chip" data-weather="clear">☀️ Clear</button>
+                <button type="button" class="weather-preset-chip" data-weather="rain">🌧️ Rain</button>
+                <button type="button" class="weather-preset-chip" data-weather="snow">❄️ Snow</button>
+                <button type="button" class="weather-preset-chip" data-weather="fog">🌫️ Fog</button>
+              </div>
+            </div>
+
+            <div class="form-grid grid-3">
+              <!-- Temperature -->
+              <div class="input-group">
+                <label for="temperature" class="input-label">Temperature <span class="req">*</span></label>
+                <div class="input-with-unit">
+                  <input id="temperature" name="temperature" type="number" step="any" min="-80" max="140" class="form-control" placeholder="72.0" required value="72.0">
+                  <span class="unit-tag">°F</span>
+                </div>
+                <span class="field-hint">Valid: -80 to 140°F</span>
+                <span class="field-error" id="tempError">Temperature must be between -80 and 140°F</span>
+              </div>
+
+              <!-- Wind Chill -->
+              <div class="input-group">
+                <label for="wind_chill" class="input-label">Wind Chill <span class="opt">Optional</span></label>
+                <div class="input-with-unit">
+                  <input id="wind_chill" name="wind_chill" type="number" step="any" min="-100" max="150" class="form-control" placeholder="Leave blank if N/A">
+                  <span class="unit-tag">°F</span>
+                </div>
+                <span class="field-hint">Valid: -100 to 150°F</span>
+                <span class="field-error" id="chillError">Wind chill must be between -100 and 150°F</span>
+              </div>
+
+              <!-- Humidity -->
+              <div class="input-group">
+                <label for="humidity" class="input-label">Relative Humidity <span class="req">*</span></label>
+                <div class="input-with-unit">
+                  <input id="humidity" name="humidity" type="number" step="any" min="0" max="100" class="form-control" placeholder="65" required value="65">
+                  <span class="unit-tag">%</span>
+                </div>
+                <span class="field-hint">Valid: 0 to 100%</span>
+                <span class="field-error" id="humidityError">Humidity must be between 0 and 100%</span>
+              </div>
+
+              <!-- Atmospheric Pressure -->
+              <div class="input-group">
+                <label for="pressure" class="input-label">Atmospheric Pressure <span class="req">*</span></label>
+                <div class="input-with-unit">
+                  <input id="pressure" name="pressure" type="number" step="any" min="20" max="35" class="form-control" placeholder="29.92" required value="29.92">
+                  <span class="unit-tag">inHg</span>
+                </div>
+                <span class="field-hint">Standard sea level: 29.92 inHg (Range: 20–35)</span>
+                <span class="field-error" id="pressureError">Pressure must be between 20.0 and 35.0 inHg</span>
+              </div>
+
+              <!-- Visibility -->
+              <div class="input-group">
+                <label for="visibility" class="input-label">Visibility <span class="req">*</span></label>
+                <div class="input-with-unit">
+                  <input id="visibility" name="visibility" type="number" step="any" min="0" max="100" class="form-control" placeholder="10.0" required value="10.0">
+                  <span class="unit-tag">miles</span>
+                </div>
+                <span class="field-hint">Standard clear day: 10.0 mi (Range: 0–100)</span>
+                <span class="field-error" id="visibilityError">Visibility must be between 0 and 100 miles</span>
+              </div>
+
+              <!-- Wind Speed -->
+              <div class="input-group">
+                <label for="wind_speed" class="input-label">Wind Speed <span class="opt">Optional</span></label>
+                <div class="input-with-unit">
+                  <input id="wind_speed" name="wind_speed" type="number" step="any" min="0" max="100" class="form-control" placeholder="12.0" value="12.0">
+                  <span class="unit-tag">mph</span>
+                </div>
+                <span class="field-hint">Range: 0 to 100 mph</span>
+                <span class="field-error" id="windSpeedError">Wind speed must be between 0 and 100 mph</span>
+              </div>
+
+              <!-- Precipitation -->
+              <div class="input-group">
+                <label for="precipitation" class="input-label">Precipitation Amount <span class="opt">Optional</span></label>
+                <div class="input-with-unit">
+                  <input id="precipitation" name="precipitation" type="number" step="any" min="0" class="form-control" placeholder="0.0" value="0.0">
+                  <span class="unit-tag">in</span>
+                </div>
+                <span class="field-hint">Rain / water accumulation</span>
+                <span class="field-error" id="precipError">Precipitation cannot be negative</span>
+              </div>
+
+              <!-- Wind Direction -->
+              <div class="input-group">
+                <label for="wind_direction" class="input-label">Wind Direction</label>
+                <div class="select-wrapper">
+                  <select id="wind_direction" name="wind_direction" class="form-control">
+                    <option value="NW" selected>NW (Northwest)</option>
+                    <option value="CALM">CALM (No Wind)</option>
+                    <option value="N">N (North)</option>
+                    <option value="NNE">NNE (North-Northeast)</option>
+                    <option value="NE">NE (Northeast)</option>
+                    <option value="ENE">ENE (East-Northeast)</option>
+                    <option value="E">E (East)</option>
+                    <option value="ESE">ESE (East-Southeast)</option>
+                    <option value="SE">SE (Southeast)</option>
+                    <option value="SSE">SSE (South-Southeast)</option>
+                    <option value="S">S (South)</option>
+                    <option value="SSW">SSW (South-Southwest)</option>
+                    <option value="SW">SW (Southwest)</option>
+                    <option value="WSW">WSW (West-Southwest)</option>
+                    <option value="W">W (West)</option>
+                    <option value="WNW">WNW (West-Northwest)</option>
+                    <option value="VAR">Variable</option>
+                  </select>
+                </div>
+                <span class="field-hint">Prevailing vector</span>
+              </div>
+
+              <!-- Weather Condition -->
+              <div class="input-group">
+                <label for="weather_condition" class="input-label">Weather Condition</label>
+                <div class="select-wrapper">
+                  <select id="weather_condition" name="weather_condition" class="form-control">
+                    <option value="Clear" selected>Clear / Fair Sky</option>
+                    <option value="Fair">Fair</option>
+                    <option value="Partly Cloudy">Partly Cloudy</option>
+                    <option value="Mostly Cloudy">Mostly Cloudy</option>
+                    <option value="Overcast">Overcast</option>
+                    <option value="Light Rain">Light Rain</option>
+                    <option value="Rain">Moderate Rain</option>
+                    <option value="Heavy Rain">Heavy Rain / Downpour</option>
+                    <option value="Thunderstorm">Thunderstorm</option>
+                    <option value="Light Snow">Light Snow</option>
+                    <option value="Snow">Snow</option>
+                    <option value="Heavy Snow">Heavy Snow / Blizzard</option>
+                    <option value="Fog">Dense Fog</option>
+                    <option value="Haze">Haze / Smoke</option>
+                  </select>
+                </div>
+                <span class="field-hint">Primary meteorological classification</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Solar & Twilight Environment (Collapsible/Advanced) -->
+          <div class="card-section accordion-section">
+            <details class="advanced-details" open>
+              <summary class="card-header summary-header">
+                <div class="card-header-icon icon-solar">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                </div>
+                <div class="card-title-group">
+                  <div class="card-step">STAGE 04</div>
+                  <h2 class="card-title">Solar & Twilight Horizon Phases</h2>
+                  <p class="card-description">Astronomical daylight angles, twilight illumination, and airport METAR station.</p>
+                </div>
+                <span class="accordion-toggle-arrow">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </span>
+              </summary>
+
+              <div class="form-grid grid-3 accordion-body">
+                <!-- Airport Code -->
+                <div class="input-group">
+                  <label for="airport_code" class="input-label">Airport Weather Station</label>
+                  <input id="airport_code" name="airport_code" type="text" class="form-control" placeholder="e.g. KMIA or KORD" value="KMIA">
+                  <span class="field-hint">Nearest ICAO METAR station</span>
+                </div>
+
+                <!-- Sunrise / Sunset -->
+                <div class="input-group">
+                  <label for="sunrise_sunset" class="input-label">Solar Position</label>
+                  <div class="select-wrapper">
+                    <select id="sunrise_sunset" name="sunrise_sunset" class="form-control">
+                      <option value="Day" selected>Day (Sun Above Horizon)</option>
+                      <option value="Night">Night (Sun Below Horizon)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Civil Twilight -->
+                <div class="input-group">
+                  <label for="civil_twilight" class="input-label">Civil Twilight</label>
+                  <div class="select-wrapper">
+                    <select id="civil_twilight" name="civil_twilight" class="form-control">
+                      <option value="Day" selected>Day (Sufficient Ambient Light)</option>
+                      <option value="Night">Night</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Nautical Twilight -->
+                <div class="input-group">
+                  <label for="nautical_twilight" class="input-label">Nautical Twilight</label>
+                  <div class="select-wrapper">
+                    <select id="nautical_twilight" name="nautical_twilight" class="form-control">
+                      <option value="Day" selected>Day</option>
+                      <option value="Night">Night (Horizon Difficult to See)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Astronomical Twilight -->
+                <div class="input-group">
+                  <label for="astronomical_twilight" class="input-label">Astronomical Twilight</label>
+                  <div class="select-wrapper">
+                    <select id="astronomical_twilight" name="astronomical_twilight" class="form-control">
+                      <option value="Day" selected>Day</option>
+                      <option value="Night">Night (Full Darkness)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Quick Twilight Sync -->
+                <div class="input-group twilight-sync-box">
+                  <label class="input-label">Horizon Quick-Sync</label>
+                  <div class="twilight-btn-pair">
+                    <button type="button" class="btn-subtle" id="setAllDayBtn">Set All Day</button>
+                    <button type="button" class="btn-subtle" id="setAllNightBtn">Set All Night</button>
+                  </div>
+                  <span class="field-hint">Synchronize all 4 twilight phases</span>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <!-- Form Action Deck -->
+          <div class="form-action-deck">
+            <div class="deck-validation-summary">
+              <span class="deck-indicator-icon">●</span>
+              <span id="deckValidationText">Form parameters fully specified for XGBoost evaluation</span>
+            </div>
+
+            <div class="deck-button-group">
+              <button type="button" class="btn-secondary" id="formResetBtn">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                Clear Inputs
+              </button>
+
+              <button type="submit" id="predictButton" class="btn-primary">
+                <span class="spinner hidden" id="predictSpinner"></span>
+                <span class="btn-icon-symbol" id="predictBtnIcon">✦</span>
+                <span class="btn-label" id="predictBtnLabel">Predict Severity Level</span>
+                <span class="btn-arrow-icon">→</span>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Error Card -->
+        <div id="errorCard" class="error-banner hidden" role="alert" aria-live="polite">
+          <div class="error-icon-box">!</div>
+          <div class="error-text-box">
+            <h3 class="error-title">Prediction Request Failed</h3>
+            <p id="errorMessage" class="error-message"></p>
+            <div class="error-help" id="errorHelpSection"></div>
+          </div>
+        </div>
       </div>
 
-      <section id="result" class="result-card hidden" aria-live="polite">
-        <div class="result-topline"><span class="result-kicker">MODEL OUTPUT</span><span class="result-status"><span></span> Prediction complete</span></div>
-        <div class="result-main">
-          <div class="result-copy">
-            <p class="eyebrow">PREDICTED ACCIDENT SEVERITY</p>
-            <h2 id="severityResult">Severity 2</h2>
-            <p id="descriptionResult" class="result-description"></p>
-            <p class="result-disclaimer">This is a model estimate, not a guarantee of the actual outcome. Do not use it as a substitute for emergency services or professional judgment.</p>
+      <!-- Decision Support Results Panel (Right / Secondary Column) -->
+      <aside class="results-container">
+        <!-- Default Idle Placeholder State -->
+        <div id="resultPlaceholder" class="result-empty-state">
+          <div class="radar-scan-box" aria-hidden="true">
+            <div class="radar-circle radar-c1"></div>
+            <div class="radar-circle radar-c2"></div>
+            <div class="radar-circle radar-c3"></div>
+            <div class="radar-sweep"></div>
+            <div class="radar-target"></div>
           </div>
-          <div class="severity-emblem" id="severityEmblem"><span>✦</span><small>AI<br>RESULT</small></div>
+          <h2 class="placeholder-title">Awaiting Incident Formulation</h2>
+          <p class="placeholder-text">Configure incident roadway, temporal, and weather factors, then click <strong>"Predict Severity Level"</strong> to compute machine learning impact severity, probability distributions, and operational response guidance.</p>
+          <div class="placeholder-quick-tip">
+            <span class="tip-icon">💡</span>
+            <span>Tip: Select any of the <strong>Scenario Presets</strong> at the top to preview realistic outcomes immediately.</span>
+          </div>
         </div>
-        <div class="probability-panel">
-          <div class="probability-heading"><div><h3>Class probability breakdown</h3><p>Relative model probability for each severity class</p></div><span class="probability-badge">4 classes</span></div>
-          <div id="probabilities" class="probability-list"></div>
-        </div>
-      </section>
 
-      <section class="model-strip">
-        <div class="model-strip-icon">✦</div>
-        <div class="model-strip-copy"><strong>Powered by machine learning</strong><p>Model selected through validation and optimization for US accident severity classification.</p></div>
-        <div class="model-metric"><span>FINAL MODEL</span><strong>XGBoost</strong></div>
-        <div class="model-metric"><span>TEST ACCURACY</span><strong>89.84%</strong></div>
-        <div class="model-metric"><span>MACRO F1</span><strong>0.683</strong></div>
-      </section>
+        <!-- Live Prediction Output Card -->
+        <section id="resultCard" class="result-card hidden" aria-live="polite">
+          <!-- Top Classification Banner -->
+          <div class="result-hero" id="resultHero">
+            <div class="hero-top-meta">
+              <span class="result-kicker">DECISION SUPPORT EVALUATION</span>
+              <span class="result-confidence-pill" id="confidencePill">
+                <span class="confidence-dot"></span>
+                <span id="confidenceText">Confidence: 89.2%</span>
+              </span>
+            </div>
+
+            <div class="hero-main-content">
+              <div class="severity-badge-container">
+                <div class="severity-badge" id="severityBadge">
+                  <span class="severity-number" id="severityNumber">2</span>
+                  <span class="severity-sublabel">SEVERITY</span>
+                </div>
+              </div>
+
+              <div class="severity-title-block">
+                <div class="severity-classification-tag" id="severityClassTag">LEVEL 2 OUTCOME</div>
+                <h2 class="severity-title" id="severityTitle">Severity 2</h2>
+                <p class="severity-desc" id="severityDescription">Moderate impact accident with notable localized traffic delay.</p>
+              </div>
+            </div>
+
+            <!-- Severity Spectrum Gauge Indicator -->
+            <div class="severity-spectrum-container">
+              <div class="spectrum-labels">
+                <span>Level 1: Minor</span>
+                <span>Level 2: Moderate</span>
+                <span>Level 3: Significant</span>
+                <span>Level 4: Severe</span>
+              </div>
+              <div class="spectrum-bar">
+                <div class="spectrum-segment seg-1" title="Level 1: Minor"></div>
+                <div class="spectrum-segment seg-2" title="Level 2: Moderate"></div>
+                <div class="spectrum-segment seg-3" title="Level 3: Significant"></div>
+                <div class="spectrum-segment seg-4" title="Level 4: Severe"></div>
+                <div class="spectrum-marker" id="spectrumMarker"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Probability Breakdown -->
+          <div class="probability-section">
+            <div class="section-title-row">
+              <div>
+                <h3 class="panel-heading">Class Probability Distribution</h3>
+                <span class="panel-subheading">Multiclass likelihood across all 4 severity categories</span>
+              </div>
+              <span class="badge-subtle">XGBoost Multiclass</span>
+            </div>
+
+            <div id="probabilitiesList" class="probability-list">
+              <!-- Dynamically populated rows -->
+            </div>
+          </div>
+
+          <!-- Operational Dispatch & Traffic Management Guidance -->
+          <div class="guidance-section">
+            <div class="section-title-row">
+              <div>
+                <h3 class="panel-heading">Operational Decision Protocols</h3>
+                <span class="panel-subheading">Actionable response guidance for traffic management and first responders</span>
+              </div>
+            </div>
+
+            <div class="guidance-cards-grid">
+              <!-- Dispatch Protocol -->
+              <div class="protocol-card">
+                <div class="protocol-icon icon-police">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <div class="protocol-content">
+                  <h4 class="protocol-title">Recommended Dispatch</h4>
+                  <p class="protocol-desc" id="protocolDispatchText">Standard patrol unit dispatch + Local towing dispatch.</p>
+                </div>
+              </div>
+
+              <!-- Traffic Control Action -->
+              <div class="protocol-card">
+                <div class="protocol-icon icon-traffic">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div class="protocol-content">
+                  <h4 class="protocol-title">Traffic & VMS Routing</h4>
+                  <p class="protocol-desc" id="protocolTrafficText">Activate overhead sign: 'INCIDENT AHEAD - EXPECT DELAYS'.</p>
+                </div>
+              </div>
+
+              <!-- Estimated Clearance -->
+              <div class="protocol-card">
+                <div class="protocol-icon icon-time-guidance">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="protocol-content">
+                  <h4 class="protocol-title">Corridor Clearance Window</h4>
+                  <p class="protocol-desc font-bold" id="protocolClearanceText">30 – 60 Minutes (Estimated)</p>
+                </div>
+              </div>
+
+              <!-- Medical / Trauma Escalation -->
+              <div class="protocol-card">
+                <div class="protocol-icon icon-medical">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                </div>
+                <div class="protocol-content">
+                  <h4 class="protocol-title">Emergency Readiness</h4>
+                  <p class="protocol-desc" id="protocolEmergencyText">Level 2: Standard municipal response team alert.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detected Risk Factors Breakdown -->
+          <div class="risk-factors-section">
+            <h3 class="panel-heading">Identified Incident Aggravating Factors</h3>
+            <div class="risk-tags-container" id="riskFactorsTags">
+              <!-- Dynamically populated chips -->
+            </div>
+          </div>
+
+          <!-- Action Footer -->
+          <div class="result-actions-footer">
+            <button type="button" class="btn-secondary" id="copyDispatchReportBtn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+              <span>Copy Dispatch Ticket</span>
+            </button>
+            <button type="button" class="btn-subtle" id="scrollToInputsBtn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+              <span>Modify Inputs</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- System Architecture & Model Intelligence Strip -->
+        <div class="system-meta-card">
+          <div class="meta-header">
+            <div class="meta-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+            </div>
+            <div>
+              <h4 class="meta-title">Validated Machine Learning Architecture</h4>
+              <p class="meta-sub">Trained & validated on 999,458 stratified US traffic incidents</p>
+            </div>
+          </div>
+          <div class="meta-metrics-grid">
+            <div class="meta-stat">
+              <span class="meta-stat-label">CHAMPION MODEL</span>
+              <span class="meta-stat-value">Optimized XGBoost</span>
+            </div>
+            <div class="meta-stat">
+              <span class="meta-stat-label">TEST ACCURACY</span>
+              <span class="meta-stat-value">89.93%</span>
+            </div>
+            <div class="meta-stat">
+              <span class="meta-stat-label">MACRO F1</span>
+              <span class="meta-stat-value">0.679</span>
+            </div>
+            <div class="meta-stat">
+              <span class="meta-stat-label">ENGINEERED FEATURES</span>
+              <span class="meta-stat-value">138 Features</span>
+            </div>
+          </div>
+        </div>
+      </aside>
     </main>
 
-    <footer><span>ROADSENSE · US ACCIDENT SEVERITY PREDICTION</span><span>Academic ML project · For demonstration purposes</span></footer>
+    <!-- API Config Modal -->
+    <div id="apiConfigModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="modalTitle" class="modal-title">Prediction Backend Configuration</h3>
+          <button type="button" class="modal-close-btn" id="closeModalBtn" aria-label="Close dialog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-text">Configure the target address of your FastAPI model prediction server:</p>
+          <div class="input-group">
+            <label for="apiUrlInput" class="input-label">Backend Prediction Endpoint URL</label>
+            <input id="apiUrlInput" type="url" class="form-control" value="http://127.0.0.1:8000/predict" placeholder="http://127.0.0.1:8000/predict">
+            <span class="field-hint">Default FastAPI server runs at http://127.0.0.1:8000</span>
+          </div>
+          <div class="modal-action-row">
+            <button type="button" class="btn-subtle" id="testApiUrlBtn">Test Endpoint Connection</button>
+            <span id="testUrlResult" class="test-result-text"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelModalBtn">Cancel</button>
+          <button type="button" class="btn-primary" id="saveModalBtn">Save & Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Hub -->
+    <div id="toastHub" class="toast-hub" aria-live="polite"></div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <strong>ROADSENSE AI</strong> · US Accidents Traffic-Impact Severity Decision Support System
+      </div>
+      <div class="footer-right">
+        <span>Academic Machine Learning Project · Multiclass Classification Decision Support</span>
+      </div>
+    </footer>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
