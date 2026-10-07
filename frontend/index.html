@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1220">
+  <title>US Accidents | Severity Prediction</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <a class="brand" href="#" aria-label="US Accidents home">
+          <span class="brand-mark">✦</span>
+          <span>ROAD<span class="brand-accent">SENSE</span></span>
+        </a>
+        <span class="status-pill"><span class="status-dot"></span> AI PREDICTION SYSTEM</span>
+      </nav>
+
+      <div class="hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow">US ACCIDENT ANALYTICS</p>
+          <h1>Understand the road.<br><span>Predict the severity.</span></h1>
+          <p class="hero-description">Enter the accident details and surrounding conditions to estimate the likely accident severity using our machine-learning model.</p>
+          <div class="hero-points">
+            <span><span class="point-icon">✓</span> Data-driven prediction</span>
+            <span><span class="point-icon">✓</span> Weather-aware inputs</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="road-symbol">
+            <div class="road-line"></div>
+            <span class="car car-one">🚙</span>
+            <span class="car car-two">🚗</span>
+            <span class="pin">✦</span>
+          </div>
+          <div class="visual-caption"><span class="visual-caption-dot"></span> Intelligent road insights</div>
+        </div>
+      </div>
+      <div class="hero-bottom">
+        <div><span class="hero-stat-label">PREDICTION TYPE</span><strong>Multi-class classification</strong></div>
+        <div><span class="hero-stat-label">MODEL</span><strong>XGBoost</strong></div>
+        <div><span class="hero-stat-label">OUTPUT</span><strong>Severity levels 1–4</strong></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="section-intro">
+        <div>
+          <p class="eyebrow">ACCIDENT DETAILS</p>
+          <h2>Build your prediction</h2>
+          <p>Fill in the known information. Fields marked optional can be left blank.</p>
+        </div>
+        <div class="step-badge"><span>01</span> Input conditions</div>
+      </div>
+
+      <form id="predictionForm">
+        <section class="form-card">
+          <div class="card-heading">
+            <div class="heading-icon location-icon">⌖</div>
+            <div><h3>Accident location</h3><p>Where did the accident happen?</p></div>
+            <span class="card-number">01</span>
+          </div>
+          <div class="grid">
+            <div class="field"><label for="source">Source <span class="required">*</span></label><input id="source" name="source" type="text" placeholder="e.g. MapQuest" required></div>
+            <div class="field"><label for="street">Street <span class="required">*</span></label><input id="street" name="street" type="text" placeholder="e.g. Main Street" required></div>
+            <div class="field"><label for="city">City <span class="required">*</span></label><input id="city" name="city" type="text" placeholder="e.g. Miami" required></div>
+            <div class="field"><label for="county">County <span class="required">*</span></label><input id="county" name="county" type="text" placeholder="e.g. Miami-Dade" required></div>
+            <div class="field"><label for="state">State <span class="required">*</span></label><input id="state" name="state" type="text" placeholder="e.g. FL" required></div>
+            <div class="field"><label for="zipcode">ZIP code <span class="required">*</span></label><input id="zipcode" name="zipcode" type="text" placeholder="e.g. 33101" required></div>
+            <div class="field"><label for="start_lat">Latitude <span class="required">*</span></label><div class="input-unit"><input id="start_lat" name="start_lat" type="number" step="any" min="-90" max="90" placeholder="25.76" required><span>°</span></div></div>
+            <div class="field"><label for="start_lng">Longitude <span class="required">*</span></label><div class="input-unit"><input id="start_lng" name="start_lng" type="number" step="any" min="-180" max="180" placeholder="-80.19" required><span>°</span></div></div>
+            <div class="field"><label for="distance">Affected road distance <span class="required">*</span></label><div class="input-unit"><input id="distance" name="distance" type="number" step="any" min="0" max="200" placeholder="1.5" required><span>mi</span></div></div>
+          </div>
+        </section>
+
+        <section class="form-card">
+          <div class="card-heading">
+            <div class="heading-icon time-icon">◷</div>
+            <div><h3>Accident time</h3><p>When was the accident reported to have started?</p></div>
+            <span class="card-number">02</span>
+          </div>
+          <div class="grid time-grid">
+            <div class="field"><label for="start_time">Date and time <span class="required">*</span></label><input id="start_time" name="start_time" type="datetime-local" required></div>
+            <div class="helper-note"><span class="helper-icon">i</span><span>Use the local date and time associated with the accident location.</span></div>
+          </div>
+        </section>
+
+        <section class="form-card">
+          <div class="card-heading">
+            <div class="heading-icon weather-icon">☼</div>
+            <div><h3>Weather conditions</h3><p>Describe the environmental conditions near the accident.</p></div>
+            <span class="card-number">03</span>
+          </div>
+          <div class="grid">
+            <div class="field"><label for="temperature">Temperature <span class="required">*</span></label><div class="input-unit"><input id="temperature" name="temperature" type="number" step="any" min="-80" max="140" placeholder="72" required><span>°F</span></div></div>
+            <div class="field"><label for="wind_chill">Wind chill <span class="optional">Optional</span></label><div class="input-unit"><input id="wind_chill" name="wind_chill" type="number" step="any" placeholder="Leave blank if unknown"><span>°F</span></div></div>
+            <div class="field"><label for="humidity">Humidity <span class="required">*</span></label><div class="input-unit"><input id="humidity" name="humidity" type="number" step="any" min="0" max="100" placeholder="65" required><span>%</span></div></div>
+            <div class="field"><label for="pressure">Atmospheric pressure <span class="required">*</span></label><div class="input-unit"><input id="pressure" name="pressure" type="number" step="any" min="20" max="35" placeholder="29.9" required><span>inHg</span></div></div>
+            <div class="field"><label for="visibility">Visibility <span class="required">*</span></label><div class="input-unit"><input id="visibility" name="visibility" type="number" step="any" min="0" max="100" placeholder="10" required><span>mi</span></div></div>
+            <div class="field"><label for="wind_speed">Wind speed <span class="optional">Optional</span></label><div class="input-unit"><input id="wind_speed" name="wind_speed" type="number" step="any" min="0" max="100" placeholder="e.g. 12"><span>mph</span></div></div>
+            <div class="field"><label for="precipitation">Precipitation <span class="optional">Optional</span></label><div class="input-unit"><input id="precipitation" name="precipitation" type="number" step="any" min="0" placeholder="e.g. 0.0"><span>in</span></div></div>
+            <div class="field"><label for="wind_direction">Wind direction <span class="optional">Optional</span></label><input id="wind_direction" name="wind_direction" type="text" placeholder="e.g. NW"></div>
+            <div class="field"><label for="weather_condition">Weather condition <span class="optional">Optional</span></label><input id="weather_condition" name="weather_condition" type="text" placeholder="e.g. Clear"></div>
+          </div>
+        </section>
+
+        <section class="form-card">
+          <div class="card-heading">
+            <div class="heading-icon extra-icon">☷</div>
+            <div><h3>Additional information</h3><p>Optional local and daylight details, if available.</p></div>
+            <span class="card-number">04</span>
+          </div>
+          <div class="grid">
+            <div class="field"><label for="airport_code">Airport code <span class="optional">Optional</span></label><input id="airport_code" name="airport_code" type="text" placeholder="e.g. KMIA"></div>
+            <div class="field"><label for="timezone">Timezone <span class="optional">Optional</span></label><input id="timezone" name="timezone" type="text" placeholder="e.g. US/Eastern"></div>
+            <div class="field"><label for="sunrise_sunset">Sunrise / sunset <span class="optional">Optional</span></label><input id="sunrise_sunset" name="sunrise_sunset" type="text" placeholder="e.g. Day or Night"></div>
+            <div class="field"><label for="civil_twilight">Civil twilight <span class="optional">Optional</span></label><input id="civil_twilight" name="civil_twilight" type="text" placeholder="e.g. Day or Night"></div>
+            <div class="field"><label for="nautical_twilight">Nautical twilight <span class="optional">Optional</span></label><input id="nautical_twilight" name="nautical_twilight" type="text" placeholder="e.g. Day or Night"></div>
+            <div class="field"><label for="astronomical_twilight">Astronomical twilight <span class="optional">Optional</span></label><input id="astronomical_twilight" name="astronomical_twilight" type="text" placeholder="e.g. Day or Night"></div>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <p><span class="required">*</span> Required fields</p>
+          <div class="action-buttons">
+            <button type="reset" class="button button-secondary" id="resetButton">Reset form</button>
+            <button type="submit" id="predictButton" class="button button-primary"><span class="button-icon">✦</span><span class="button-label">Predict severity</span><span class="button-arrow">→</span></button>
+          </div>
+        </div>
+      </form>
+
+      <div id="error" class="error-box hidden" role="alert" aria-live="polite">
+        <span class="error-symbol">!</span><div><strong>Prediction could not be completed</strong><p id="errorMessage"></p></div>
+      </div>
+
+      <section id="result" class="result-card hidden" aria-live="polite">
+        <div class="result-topline"><span class="result-kicker">MODEL OUTPUT</span><span class="result-status"><span></span> Prediction complete</span></div>
+        <div class="result-main">
+          <div class="result-copy">
+            <p class="eyebrow">PREDICTED ACCIDENT SEVERITY</p>
+            <h2 id="severityResult">Severity 2</h2>
+            <p id="descriptionResult" class="result-description"></p>
+            <p class="result-disclaimer">This is a model estimate, not a guarantee of the actual outcome. Do not use it as a substitute for emergency services or professional judgment.</p>
+          </div>
+          <div class="severity-emblem" id="severityEmblem"><span>✦</span><small>AI<br>RESULT</small></div>
+        </div>
+        <div class="probability-panel">
+          <div class="probability-heading"><div><h3>Class probability breakdown</h3><p>Relative model probability for each severity class</p></div><span class="probability-badge">4 classes</span></div>
+          <div id="probabilities" class="probability-list"></div>
+        </div>
+      </section>
+
+      <section class="model-strip">
+        <div class="model-strip-icon">✦</div>
+        <div class="model-strip-copy"><strong>Powered by machine learning</strong><p>Model selected through validation and optimization for US accident severity classification.</p></div>
+        <div class="model-metric"><span>FINAL MODEL</span><strong>XGBoost</strong></div>
+        <div class="model-metric"><span>TEST ACCURACY</span><strong>89.84%</strong></div>
+        <div class="model-metric"><span>MACRO F1</span><strong>0.683</strong></div>
+      </section>
+    </main>
+
+    <footer><span>ROADSENSE · US ACCIDENT SEVERITY PREDICTION</span><span>Academic ML project · For demonstration purposes</span></footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

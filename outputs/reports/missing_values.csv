@@ -6,15 +6,15 @@ Wind_Chill(F),259217,25.93
 Wind_Speed(mph),74143,7.42
 Visibility(mi),23031,2.3
 Wind_Direction,22739,2.27
-Humidity(%),22621,2.26
 Weather_Condition,22586,2.26
+Humidity(%),22621,2.26
 Temperature(F),21323,2.13
 Pressure(in),18371,1.84
 Weather_Timestamp,15762,1.58
 Sunrise_Sunset,3027,0.3
+Civil_Twilight,3027,0.3
 Nautical_Twilight,3027,0.3
 Astronomical_Twilight,3027,0.3
-Civil_Twilight,3027,0.3
 Airport_Code,2887,0.29
 Street,1383,0.14
 Timezone,961,0.1
