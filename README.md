@@ -2,63 +2,169 @@
 
 ## Project Overview
 
-This project develops a machine learning-based decision support system
-for predicting traffic-impact severity using the US Accidents dataset.
+This project develops a machine learning system to predict the severity of road accidents in the United States using accident, location, time, and weather information.
 
-The project focuses on understanding accident patterns, preprocessing
-large-scale accident data, engineering meaningful features, selecting
-relevant features, and developing machine learning classification models.
+The project uses the US Accidents dataset covering 2016–2023. It includes data sampling, exploratory data analysis, preprocessing, model development, hyperparameter optimization, model evaluation, backend development, and frontend integration.
+
+The final model is an optimized **XGBoost classifier** that predicts one of four accident severity classes.
+
+## Project Objectives
+
+- Analyze and understand the US Accidents dataset.
+- Clean and preprocess the data for machine learning.
+- Engineer useful temporal and numerical features.
+- Train and compare multiple classification models.
+- Optimize model hyperparameters.
+- Evaluate the final model using appropriate classification metrics.
+- Develop a backend API for accident severity predictions.
+- Create a user-friendly frontend for entering accident information and viewing predictions.
 
 ## Dataset
 
-Dataset: US Accidents (2016–2023)
+The project uses the US Accidents dataset covering 2016–2023.
 
-Original dataset source:
-https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents
+- Original dataset: approximately 7.7 million records.
+- Stratified sample: 999,592 records.
+- Training dataset: 799,673 records.
+- Testing dataset: 199,919 records.
+- Final model inputs: 138 features.
+- Target variable: `Severity`.
 
-The locally available dataset contains approximately 6.67 million
-accident records.
+### Severity Classes
 
-Due to computational constraints and project requirements, a
-stratified sample of approximately 1 million records was created
-while preserving the Year × Severity distribution.
+| Severity | Description |
+|---|---|
+| 1 | Lowest severity class |
+| 2 | Moderate severity class |
+| 3 | High severity class |
+| 4 | Highest severity class |
 
-Working dataset:
+The severity labels follow the original dataset. The descriptions shown in the application are simplified explanations for users.
 
-- Records: 999,458
-- Features: 46
-- Period: 2016–2023
-- Target: Severity
-- Task: Multiclass classification
+## Technologies Used
 
-## Target Variable
+- **Python** — primary programming language
+- **Pandas and NumPy** — data processing and feature engineering
+- **Scikit-learn** — model evaluation and hyperparameter search
+- **XGBoost** — final classification model
+- **FastAPI** — backend API
+- **Uvicorn** — API server
+- **HTML, CSS, JavaScript** — frontend
+- **Jupyter Notebook** — data analysis and model development
+- **Git and GitHub** — version control
 
-`Severity` represents the traffic-impact severity level of an accident.
+## Project Structure
 
-The project initially retains four classes:
+```text
+US-Accidents-Severity-Prediction/
+│
+├── data/
+│   ├── train_final.csv
+│   └── test_final.csv
+│
+├── notebooks/
+│   ├── 01_sampling.ipynb
+│   ├── 02_eda.ipynb
+│   ├── 03_preprocessing.ipynb
+│   ├── 04_model_development.ipynb
+│   └── 05_model_optimization.ipynb
+│
+├── models/
+│   ├── final_xgboost_model.pkl
+│   └── preprocessing_artifacts.pkl
+│
+├── backend/
+│   ├── app.py
+│   └── build_artifacts.py
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── requirements.txt
+└── README.md
+```
 
-- Severity 1
-- Severity 2
-- Severity 3
-- Severity 4
+*Note: This structure describes the intended project layout. Update the file list if your repository uses different filenames or folders.*
 
-## Project Workflow
+## Methodology
 
-1. Problem Understanding
-2. Dataset Identification
-3. Data Sampling
-4. Data Understanding and EDA
-5. Data Preprocessing
-6. Feature Engineering
-7. Feature Selection
-8. Machine Learning Model Development
-9. Model Evaluation
-10. Hyperparameter Optimization
-11. Prediction System Development
-12. Testing and Documentation
+### 1. Data Sampling and Exploratory Data Analysis
 
-## Project Status
+A stratified sample of 999,592 records was created from the original dataset to make analysis and model training more manageable. Sampling considered both year and accident severity.
 
-Currently working on:
+Exploratory data analysis examined data types, missing values, duplicate records, constant columns, descriptive statistics, and target-class distribution.
 
-**Stage 3 – Data Understanding and Exploratory Data Analysis**
+The target variable is imbalanced, with Severity 2 representing the majority of records.
+
+### 2. Data Preprocessing
+
+Preprocessing included:
+
+- Missing-value analysis and treatment.
+- Invalid-value investigation and treatment.
+- Duplicate-record checks.
+- Categorical feature encoding.
+- Temporal feature engineering.
+- Numerical transformations.
+- Final feature selection.
+- Creation of training and testing datasets.
+
+Temporal features include year, month, day, hour, day of the week, weekend and night indicators, and cyclical encodings for hour and month.
+
+The final modeling datasets contain 138 predictor features and the target variable.
+
+### 3. Model Development
+
+Four classification algorithms were evaluated:
+
+- Logistic Regression
+- Decision Tree
+- Random Forest
+- XGBoost
+
+Models were compared using accuracy, macro precision, macro recall, macro F1-score, and weighted F1-score.
+
+Macro F1-score was particularly important because it gives equal importance to each severity class.
+
+### 4. Hyperparameter Optimization
+
+Randomized Search Cross-Validation was used to optimize Random Forest and XGBoost models.
+
+The optimized XGBoost model achieved the highest validation Macro F1-score among the evaluated candidates and was selected as the final model.
+
+### 5. Backend Development
+
+The backend uses FastAPI to:
+
+- Load the trained XGBoost model.
+- Load preprocessing artifacts.
+- Receive accident information through an API request.
+- Validate input fields.
+- Prepare model features.
+- Generate a severity prediction.
+- Return the predicted class and model probabilities.
+
+### 6. Frontend Development
+
+The frontend provides a form for entering accident location, time, distance, and weather information.
+
+It sends the input to the backend API and displays the predicted severity and model probability estimates. The interface also provides basic input validation and error messages.
+
+## Final Model Performance
+
+The optimized XGBoost model was evaluated on the held-out test dataset.
+
+| Metric | Test Result |
+|---|---:|
+| Accuracy | 0.898379 |
+| Macro Precision | 0.786912 |
+| Macro Recall | 0.631647 |
+| Macro F1-score | 0.682952 |
+| Weighted F1-score | 0.892291 |
+
+The model achieved approximately **89.84% test accuracy** and a **0.6830 Macro F1-score**.
+
+Although overall accuracy is high, performance differs between severity classes because of the imbalanced target distribution. In particular, the highest severity class is more difficult to identify reliably. The results should therefore be interpreted using class-specific metrics as well as overall accuracy.
+
